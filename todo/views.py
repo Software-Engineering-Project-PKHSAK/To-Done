@@ -6,6 +6,7 @@ from django.http import HttpResponse, JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction, IntegrityError
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 
 from todo.models import List, ListItem, Template, TemplateItem, ListTags, SharedUsers, SharedList
 
@@ -508,3 +509,13 @@ def password_reset_request(request):
     
     password_reset_form = PasswordResetForm()
     return render(request=request, template_name="todo/password/password_reset.html", context={"password_reset_form":password_reset_form})
+
+# Delete a template
+@require_POST
+def delete_template(request, template_id):
+    if not request.user.is_authenticated:
+        return redirect("/login")
+    template = get_object_or_404(Template, id=template_id)
+    if template:
+        template.delete()
+    return redirect('/templates')

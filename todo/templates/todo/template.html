@@ -234,7 +234,7 @@
         /* Style the "Add" button */
         .main .addBtn {
           padding: 9px;
-          width: 25%;
+          width: 100%;
           background: #d9d9d9;
           color: #555;
           float: left;
@@ -265,6 +265,10 @@
             min-width: 200px;
             font-weight: 500;
             color: #f9f9f9;
+        }
+
+        .add-template-button.delete:hover{
+          background: #a81a0f;
         }
 
         .add-template-button:hover{
@@ -308,6 +312,10 @@
                     {% csrf_token %}
                     <input type="hidden" name="template" id="template-{{ template.id }}" value="{{ template.id }}">
                     <button class="add-template-button" onclick="">Create Todo Using This Template</button>
+                </form>
+                <form action="/templates/delete/{{ template.id }}" method="post" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="add-template-button delete" onclick="return confirm('Are you sure you want to delete this template?');">Delete Template</button>
                 </form>
             </ul>
         {% empty %}
