@@ -7,6 +7,7 @@ app_name = "todo"
 # Urls for to-done app
 urlpatterns = [
     path('', views.index, name='index'),
+    path('index.html', views.social_login, name="social_login"),
     path('todo', views.index, name='todo'),
     path('todo/<int:list_id>', views.index, name='todo_list_id'),
     path('todo/new-from-template', views.todo_from_template, name='todo_from_template'),
@@ -24,6 +25,7 @@ urlpatterns = [
     path('updateListItem/<int:item_id>', views.updateListItem, name='updateListItem'),
     path("register", views.register_request, name="register"),
     path("login", views.login_request, name="login"),
+    path("social_login", views.social_login, name="social_login"),
     path("logout", views.logout_request, name="logout"),
     path("password_reset", views.password_reset_request, name="password_reset"),
     path('templates/delete/<int:template_id>', views.delete_template, name='delete_template')

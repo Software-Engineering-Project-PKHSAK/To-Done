@@ -24,7 +24,8 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.core.mail import EmailMessage
-
+from google.oauth2 import id_token
+from google.auth.transport import requests
 
 # Render the home page with users' to-do lists
 def index(request, list_id=0):
@@ -445,6 +446,51 @@ def register_request(request):
         messages.error(request, "Unsuccessful registration. Invalid information.")
     form = NewUserForm()
     return render(request=request, template_name="todo/register.html", context={"register_form":form})
+
+# Social login
+@csrf_exempt
+def social_login(request):
+    """
+    Google calls this URL after the user has signed in with their Google account.
+    """
+    token = request.POST.get('credential')
+    
+    try:
+        # Verify the token with Google's API
+        user_data = id_token.verify_oauth2_token(
+            token, requests.Request(), "736572233255-usvqanirqiarbk9ffhl6t6tl9br651fn.apps.googleusercontent.com"
+        )
+        
+        # Extract necessary user information
+        email = user_data.get('email')
+        first_name = user_data.get('given_name')
+        last_name = user_data.get('family_name')
+        
+        # Create or retrieve user
+        user, created = User.objects.get_or_create(
+            email=email,
+            defaults={
+                'username': email.split('@')[0],  # Ensure a unique username
+                'first_name': first_name,
+                'last_name': last_name,
+            }
+        )
+        
+        # Authenticate and log in the user
+        if created:
+            user.set_unusable_password()  # Optional: set an unusable password for Google-only login
+            user.save()
+        
+        # Log the user in
+        login(request, user)
+        
+        # Optional: Store additional data in session or profile model
+        # request.session['profile_picture'] = user_data.get('picture')
+        
+        return redirect("todo:index")
+    
+    except ValueError:
+        return HttpResponse(status=403)
 
 
 # Login a user
