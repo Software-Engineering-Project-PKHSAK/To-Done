@@ -58,23 +58,27 @@ We wanted to work on something that is:
 
 `to-done` is a todo list app that is actually useful, very easy to create a basic working version with where a ton of new features can be added, touches upon all the aspects of web programming, database, working in a team etc.
 
-### Key Features (Last Version)
+### Features 
  * [Register](#register)
  * [Login](#login-forget-password)
  * [Create, Update, Delete Todo Lists](#manage-todo-list)
  * [Quickly Create Todo Lists From Existing Templates](#templates)
  * [Create Your Own Templates](#templates)
+ 
+### Key Features (Last Version)
+ * [Shared List](#shared-todo-lists)
+ * [Add Due Date To Tasks](#due-date-color-tags)
+ * [Due Date Alerting Mechanism](#due-date-color-tags)
+ * [Add Reminder Message to task completed](#due-date-color-tags)
+ * [Customized Color Tag](#due-date-color-tags)
+ * [Add Tags To Todo Lists For Customizable Grouping](#customizable-grouping-tags)
 
 ### New Features
-* [Shared List](#shared-todo-lists)
-* [Add Due Date To Tasks](#due-date-color-tags)
-* [Due Date Alerting Mechanism](#due-date-color-tags)
-* [Add Reminder Message to task completed](#due-date-color-tags)
-* [Customized Color Tag](#due-date-color-tags)
-* [Add Tags To Todo Lists For Customizable Grouping](#customizable-grouping-tags)
+ * [Dark Mode]
+ * Social login - Google Sign-in 
+ * Bugfixes
 
 ### Upcoming Features
- * Social login
  * Export and import to-do lists
  * Gamification - earn points by finishing your tasks, show-off your productivity in social media
  * [List of All Planned Features for Second Phase](https://github.com/users/shahleon/projects/2/views/6)
@@ -141,18 +145,16 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/juliachiu1"><img src="https://avatars.githubusercontent.com/u/112150278?v=4" width="100px;" alt=""/><br /><sub><b>Chiu, Ching-Lun</b></sub></a></td>
-    <td align="center"><a href="https://github.com/Hsueh-YANG"><img src="https://avatars.githubusercontent.com/u/23623764?v=4" width="100px;" alt=""/><br /><sub><b>Yu, Hsueh-Yang</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/123standup"><img src="https://avatars.githubusercontent.com/u/59056739?v=4" width="100px;" alt=""/><br /><sub><b>Lin, Po-Hsun</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/Chloe-Ku"><img src="https://avatars.githubusercontent.com/u/60029373?v=4" width="100px;" alt=""/><br /><sub><b>Ku, Li-Ling</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/jackson910210"><img src="https://avatars.githubusercontent.com/u/32348727?v=4" width="100px;" alt=""/><br /><sub><b>Chiang, Chen-Hsuan</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/akarsh16reddy"><img src="https://avatars.githubusercontent.com/u/63505953?v=4" width="100px;" alt=""/><br /><sub><b>Akarsh Reddy, Eathamukkala</b></sub></a></td>
+    <td align="center"><a href="https://github.com/PrateekKamath"><img src="https://avatars.githubusercontent.com/u/92785050?v=4" width="100px;" alt=""/><br /><sub><b>Prateek Kamath</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/123standup"><img src="https://avatars.githubusercontent.com/u/24963056?v=4" width="100px;" alt=""/><br /><sub><b>Himanshu Singh</b></sub></a><br /></td>
   </tr>
 </table>
 
 ### Developers (Last Version)
 
-* Shahnewaz Leon (sleon3@ncsu.edu)
-* Dong Li (dli35@ncsu.edu)
-* Cheng-Yun Kuo (ckuo3@ncsu.edu)
-* Drew Commings (docummin@ncsu.edu)
-* Janet Brock (jdbrock@ncsu.edu)
+* Chiu, Ching-Lun (https://github.com/juliachiu1)
+* Yu, Hsueh-Yang (https://github.com/Hsueh-YANG)
+* Lin, Po-Hsun (https://github.com/123standup)
+* Ku, Li-Ling (https://github.com/Chloe-Ku)
+* Chiang, Chen-Hsuan (https://github.com/jackson910210)
