@@ -2,7 +2,7 @@ import datetime
 import json
 
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-from django.http import HttpResponse, JsonResponse, Http404
+from django.http import HttpResponse, JsonResponse, Http404, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction, IntegrityError
 from django.utils import timezone
@@ -26,6 +26,22 @@ from django.utils.encoding import force_bytes
 from django.core.mail import EmailMessage
 from google.oauth2 import id_token
 from google.auth.transport import requests
+
+config = {
+    "darkMode": False,
+    "primary_color": '#0fa662',
+    "hover_color": "#0b8f54"
+}
+
+def config_hook(request, template_str):
+    config["darkMode"] = not config["darkMode"]
+    if config["darkMode"]:
+        config["primary_color"] = '#000000'
+        config["hover_color"] = '#cccccc'
+    else:
+        config["primary_color"] = '#0fa662'
+        config["hover_color"] = '#0b8f54'
+    return redirect('todo:' + template_str)
 
 # Render the home page with users' to-do lists
 def index(request, list_id=0):
@@ -77,6 +93,7 @@ def index(request, list_id=0):
         'templates': saved_templates,
         'list_tags': list_tags,
         'shared_list': shared_list,
+        'config': config
     }
     return render(request, 'todo/index.html', context)
 
@@ -149,7 +166,8 @@ def template(request, template_id=0):
     else:
         saved_templates = Template.objects.filter(user_id_id=request.user.id).order_by('created_on')
     context = {
-        'templates': saved_templates
+        'templates': saved_templates,
+        'config': config
     }
     return render(request, 'todo/template.html', context)
 
@@ -445,7 +463,7 @@ def register_request(request):
             return redirect("todo:index")
         messages.error(request, "Unsuccessful registration. Invalid information.")
     form = NewUserForm()
-    return render(request=request, template_name="todo/register.html", context={"register_form":form})
+    return render(request=request, template_name="todo/register.html", context={"register_form":form, 'config': config})
 
 # Social login
 @csrf_exempt
@@ -510,7 +528,7 @@ def login_request(request):
 		else:
 			messages.error(request,"Invalid username or password.")
 	form = AuthenticationForm()
-	return render(request=request, template_name="todo/login.html", context={"login_form":form})
+	return render(request=request, template_name="todo/login.html", context={"login_form":form, "config": config})
 
 
 # Logout a user
@@ -554,7 +572,7 @@ def password_reset_request(request):
             messages.error(request, "Not an Email from existing users!")
     
     password_reset_form = PasswordResetForm()
-    return render(request=request, template_name="todo/password/password_reset.html", context={"password_reset_form":password_reset_form})
+    return render(request=request, template_name="todo/password/password_reset.html", context={"password_reset_form":password_reset_form, "config": config})
 
 # Delete a template
 @require_POST

@@ -18,7 +18,7 @@
 
     .topbar {
         overflow: hidden;
-        background-color: #0fa662;
+        background-color: {{ config.primary_color }};
         position: fixed;
         width: 100%;
         top: 0;
@@ -49,7 +49,7 @@
     }
 
     h1 {
-        color: #0fa662;
+        color: {{ config.primary_color }};
         text-align: center;
     }
 
@@ -57,7 +57,7 @@
         display: inline-block;
         cursor: pointer;
         border-radius: 10px;
-        background: #0fa662;
+        background: {{ config.primary_color }};
         border: 0;
         font-size: 16px;
         height: 37px;
@@ -71,7 +71,7 @@
     }
 
     .main button:hover {
-        background: #0b8f54;
+        background: {{ config.hover_color }}
     }
 
     input[type=text], input[type=password], input[type=email] {
@@ -123,6 +123,9 @@
 			{{ login_form|crispy }}
 			<button class="btn btn-primary" type="submit">Login</button>
 		  </form>
+            <div style="padding-top: 12px"><a href="{% url 'todo:config_hook' 'login' %}">Theme: 
+            {% if config.darkMode %} Dark 
+            {% else %} Light {% endif %}</a></div>
 		  <p class="text-center"><a href="/register">Create an account</a>.</p>
 		  <p class="text-center"><a href="/password_reset">Forget password</a>.</p>
 		{% endblock %}

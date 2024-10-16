@@ -14,7 +14,7 @@
 
         .topbar {
             overflow: hidden;
-            background-color: #0fa662;
+            background-color: {{ config.primary_color }};
             position: fixed;
             width: 100%;
             top: 0;
@@ -75,7 +75,7 @@
         }
 
         .sidenav a:hover {
-            color: #0fa662;
+            color: {{ config.primary_color }};
         }
 
         .sidenav input[type=text] {
@@ -112,7 +112,7 @@
         .sidenav hr {
             margin-top: 50px;
             height: 2px;
-            background-color: #0fa662;
+            background-color: {{ config.primary_color }};
             border: none;
             width: 87%;
             display: block;
@@ -128,7 +128,7 @@
 
         .main h2 a {
             text-decoration: none;
-            color: #0fa662;
+            color: {{ config.primary_color }};
             display: block;
             padding-left: 3px;
         }
@@ -202,7 +202,7 @@
 
         #noTempYet {
             text-decoration: none;
-            color: #0fa662;
+            color: {{ config.primary_color }};
             display: block;
             align-items: center;
         }
@@ -254,7 +254,7 @@
             display: inline-block;
             cursor: pointer;
             border-radius: 10px;
-            background: #0fa662;
+            background: {{ config.primary_color }};
             border: 0;
             font-size: 16px;
             height: 37px;
@@ -272,7 +272,7 @@
         }
 
         .add-template-button:hover{
-            background: #0b8f54;
+            background: {{ config.hover_color }}
         }
     </style>
     <meta charset="UTF-8">
@@ -287,10 +287,13 @@
             <li><a class="tabs" href="/templates">Templates</a></li>
         </ul>
 		<ul style="float: right;">
-		{% if user.is_authenticated %}
-            <li><a href="#">Welcome, {{user.username}}</a></li>
-		  <li><a class="tabs" href="/logout">Logout</a></li>
-		{% else %}
+      {% if user.is_authenticated %}
+      <li><a href="#">Welcome, {{user.username}}</a></li>
+      <li><a href="{% url 'todo:config_hook' 'template' %}">Theme: 
+        {% if config.darkMode %} Dark 
+        {% else %} Light {% endif %}</a></li>
+      <li><a class="tabs" href="/logout">Logout</a></li>
+      {% else %}
 		  <li><a class="tabs" href="/login">Login</a></li>
 		{% endif %}
 		</ul>
