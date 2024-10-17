@@ -45,6 +45,27 @@ def config_hook(request, template_str):
 
 # Render the home page with users' to-do lists
 def index(request, list_id=0):
+    """
+    Renders the index page for the to-do application.
+
+    This view function retrieves the user's lists and items based on their authentication status
+    and whether a specific list ID is provided. If the user is not authenticated, they are redirected
+    to the login page. If a valid list ID is provided, that specific list is retrieved; otherwise, the
+    latest lists for the authenticated user are fetched along with any shared lists. It also gathers
+    the user's list items, saved templates, and list tags, and checks for overdue items to change their color.
+
+    Args:
+        request: The HTTP request object.
+        list_id (int, optional): The ID of the specific list to display. Defaults to 0.
+
+    Returns:
+        HttpResponse: The rendered HTML response for the index page with the context containing:
+            - latest_lists: A list of the user's latest lists or the specific list if an ID is provided.
+            - latest_list_items: A queryset of all list items ordered by their list ID.
+            - templates: A queryset of saved templates for the authenticated user, ordered by creation date.
+            - list_tags: A queryset of tags associated with the user's lists, ordered by creation date.
+            - shared_list: A list of shared lists for the user.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
     
@@ -99,6 +120,23 @@ def index(request, list_id=0):
 
 # Create a new to-do list from templates and redirect to the to-do list homepage
 def todo_from_template(request):
+    """
+    Creates a new to-do list from a selected template.
+
+    This view function is invoked when a user wants to create a new to-do list based on an existing template.
+    It first checks if the user is authenticated. If not, it redirects them to the login page. If the user
+    is authenticated, it fetches the specified template, creates a new to-do list with the template's title,
+    and then populates the new list with items defined in the template.
+
+    Args:
+        request: The HTTP request object containing the user's input data.
+
+    Returns:
+        HttpResponse: A redirect to the to-do page after successfully creating the new list and its items.
+
+    Raises:
+        Http404: If the specified template does not exist, a 404 error is raised.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
     template_id = request.POST['template']
@@ -125,6 +163,23 @@ def todo_from_template(request):
 
 # Create a new Template from existing to-do list and redirect to the templates list page
 def template_from_todo(request):
+    """
+    Creates a new template from a selected to-do list.
+
+    This view function is invoked when a user wants to create a new template based on an existing to-do list.
+    It first checks if the user is authenticated; if not, it redirects them to the login page. If the user
+    is authenticated, it fetches the specified to-do list, creates a new template with the to-do list's title,
+    and then populates the new template with items defined in the to-do list.
+
+    Args:
+        request: The HTTP request object containing the user's input data.
+
+    Returns:
+        HttpResponse: A redirect to the templates page after successfully creating the new template and its items.
+
+    Raises:
+        Http404: If the specified to-do list does not exist, a 404 error is raised.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
     todo_id = request.POST['todo']
@@ -149,6 +204,22 @@ def template_from_todo(request):
 
 # Delete a to-do list
 def delete_todo(request):
+    """
+    Deletes a specified to-do item.
+
+    This view function is invoked when a user wants to delete a to-do item. 
+    It first checks if the user is authenticated; if not, it redirects them to the login page. 
+    If the user is authenticated, it retrieves the specified to-do item by its ID and deletes it.
+
+    Args:
+        request: The HTTP request object containing the user's input data.
+
+    Returns:
+        HttpResponse: A redirect to the to-do page after successfully deleting the specified to-do item.
+
+    Raises:
+        Http404: If the specified to-do item does not exist, a 404 error is raised.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
     todo_id = request.POST['todo']
@@ -159,6 +230,21 @@ def delete_todo(request):
 
 # Render the template list page
 def template(request, template_id=0):
+    """
+    Retrieves and displays saved templates for the authenticated user.
+
+    This view function is invoked to render a list of saved templates. It first checks if the user is 
+    authenticated; if not, it redirects them to the login page. If a template ID is provided, it fetches
+    that specific template; otherwise, it retrieves all templates created by the authenticated user,
+    ordered by creation date.
+
+    Args:
+        request: The HTTP request object containing the user's input data.
+        template_id (int, optional): The ID of the template to retrieve. Defaults to 0.
+
+    Returns:
+        HttpResponse: Renders the template page with the list of saved templates.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
     if template_id != 0:
@@ -175,6 +261,23 @@ def template(request, template_id=0):
 # Remove a to-do list item, called by javascript function
 @csrf_exempt
 def removeListItem(request):
+    """
+    Removes a to-do list item based on the provided list item ID.
+
+    This view function is invoked via a JavaScript call to remove a specified item from a to-do list. 
+    It checks if the user is authenticated; if not, it redirects them to the login page. Upon receiving a 
+    POST request, it decodes the JSON body to retrieve the list item ID and attempts to delete the corresponding 
+    ListItem from the database. If an integrity error occurs during the deletion, it logs the error message.
+
+    Args:
+        request: The HTTP request object containing the user's input data.
+
+    Returns:
+        HttpResponse: A redirect to the to-do page after successfully removing the specified list item.
+    
+    Raises:
+        IntegrityError: If there is a database integrity error while trying to delete the list item.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
     if request.method == 'POST':
@@ -196,6 +299,25 @@ def removeListItem(request):
 # Update a to-do list item, called by javascript function
 @csrf_exempt
 def updateListItem(request, item_id):
+    """
+    Updates the text of a to-do list item based on the provided item ID.
+
+    This view function is called to update the text of a specific to-do list item. It checks if the user 
+    is authenticated; if not, it redirects them to the login page. If the request method is POST, it retrieves
+    the updated text from the request, fetches the ListItem by ID, and updates its text. If the item ID is 
+    invalid (less than or equal to zero), it redirects to the index page. An IntegrityError during the 
+    transaction is caught and logged.
+
+    Args:
+        request: The HTTP request object containing the user's input data.
+        item_id (int): The ID of the to-do list item to be updated.
+
+    Returns:
+        HttpResponse: Redirects to the home page after updating the item or to the index if item ID is invalid.
+    
+    Raises:
+        IntegrityError: If there is a database integrity error while trying to update the list item.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
     if request.method == 'POST':
@@ -221,6 +343,20 @@ def updateListItem(request, item_id):
 # Add a new to-do list item, called by javascript function
 @csrf_exempt
 def addNewListItem(request):
+    """
+    Adds a new to-do list item based on the provided data.
+
+    This view function is invoked to create a new to-do list item. It checks if the user is authenticated;
+    if not, it redirects them to the login page. On receiving a POST request, it decodes the JSON body to 
+    retrieve the list item details and creates a new ListItem object. If an IntegrityError occurs during 
+    the creation process, it logs the error and returns an item ID of -1.
+
+    Args:
+        request: The HTTP request object containing the user's input data.
+
+    Returns:
+        JsonResponse: Contains the ID of the newly created item or -1 in case of failure.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
     if request.method == 'POST':
@@ -254,7 +390,22 @@ def addNewListItem(request):
 @csrf_exempt
 def markListItem(request):
     """
-    Mark a list item as done or undo it
+    Marks a to-do list item as done or undoes the action based on the provided data.
+
+    This view function is called to toggle the completion status of a specific list item. It checks if the 
+    user is authenticated; if not, it redirects them to the login page. Upon receiving a POST request, it 
+    decodes the JSON body to get the relevant details, including the item ID and completion status. It updates 
+    the ListItem's is_done field and the finished_on timestamp. If an IntegrityError occurs during the 
+    transaction, it logs the error and returns an empty JsonResponse.
+
+    Args:
+        request: The HTTP request object containing the user's input data.
+
+    Returns:
+        JsonResponse: Contains the name of the item and the list if successful, or an empty response in case of failure.
+    
+    Raises:
+        IntegrityError: If there is a database integrity error while trying to update the list item.
     """
     if not request.user.is_authenticated:
         return redirect("/login")
@@ -291,6 +442,20 @@ def markListItem(request):
 # Get all the list tags by user id
 @csrf_exempt
 def getListTagsByUserid(request):
+    """
+    Retrieves all list tags associated with the authenticated user.
+
+    This view function is called to fetch the list tags created by the authenticated user. It checks 
+    if the user is authenticated; if not, it redirects them to the login page. Upon receiving a POST 
+    request, it retrieves the user's tags from the database and returns them as a JSON response. 
+    If an IntegrityError occurs during the transaction, it logs the error and returns an empty JsonResponse.
+
+    Args:
+        request: The HTTP request object containing the user's input data.
+
+    Returns:
+        JsonResponse: Contains the list of tags associated with the user or an empty response in case of failure.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
     if request.method == 'POST':
@@ -308,6 +473,22 @@ def getListTagsByUserid(request):
 # Get a to-do list item by name, called by javascript function
 @csrf_exempt
 def getListItemByName(request):
+    """
+    Retrieve a to-do list item by its name.
+
+    This function checks if the user is authenticated, and if so, 
+    it processes a POST request to get the item details based on 
+    the provided list ID and item name. 
+
+    Args:
+        request (HttpRequest): The HTTP request object containing 
+                               the user's request data.
+
+    Returns:
+        JsonResponse: A JSON response containing the item ID, item 
+                      name, list name, and item text if successful, 
+                      or a JSON response indicating a failure.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
     if request.method == 'POST':
@@ -336,6 +517,22 @@ def getListItemByName(request):
 # Get a to-do list item by id, called by javascript function
 @csrf_exempt
 def getListItemById(request):
+    """
+    Retrieve a to-do list item by its ID.
+
+    This function checks if the user is authenticated and processes 
+    a POST request to retrieve the details of a specific item 
+    identified by its ID.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing 
+                               the user's request data.
+
+    Returns:
+        JsonResponse: A JSON response containing the item ID, item 
+                      name, list name, and item text if successful, 
+                      or a JSON response indicating a failure.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
     if request.method == 'POST':
@@ -366,7 +563,22 @@ def getListItemById(request):
 # Create a new to-do list, called by javascript function
 @csrf_exempt
 def createNewTodoList(request):
+    """
+    Create a new to-do list.
 
+    This function checks if the user is authenticated and processes 
+    a POST request to create a new to-do list with the specified 
+    attributes, including sharing it with other users if needed.
+
+    Args:
+        request (HttpRequest): The HTTP request object containing 
+                               the user's request data.
+
+    Returns:
+        HttpResponse: A success response if the list is created 
+                      successfully, or an error message if the 
+                      request fails or the user is not authenticated.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
 
@@ -448,6 +660,17 @@ def createNewTodoList(request):
 
 # Register a new user account
 def register_request(request):
+    """
+    Handles user registration. If the request method is POST, it validates the form data and creates a new user.
+    On successful registration, it logs in the user and redirects to the index page. If registration fails, it 
+    displays an error message.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: Redirects to the index page or renders the registration form with error messages.
+    """
     if request.method == "POST":
         form = NewUserForm(request.POST)
         if form.is_valid():
@@ -469,7 +692,14 @@ def register_request(request):
 @csrf_exempt
 def social_login(request):
     """
-    Google calls this URL after the user has signed in with their Google account.
+    Handles social login via Google. This function verifies the token received from Google, retrieves user data, 
+    and either logs in an existing user or creates a new user account.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: Redirects to the index page or returns a 403 status on token verification failure.
     """
     token = request.POST.get('credential')
     
@@ -513,6 +743,17 @@ def social_login(request):
 
 # Login a user
 def login_request(request):
+    """
+    Handles user login. If the request method is POST, it validates the login form and authenticates the user.
+    On successful authentication, it logs in the user and redirects to the index page. If authentication fails, 
+    it displays an error message.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: Redirects to the index page or renders the login form with error messages.
+    """
 	if request.method == "POST":
 		form = AuthenticationForm(request, data=request.POST)
 		if form.is_valid():
@@ -533,6 +774,15 @@ def login_request(request):
 
 # Logout a user
 def logout_request(request):
+    """
+    Handles user logout. Logs out the user and redirects to the index page with a success message.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: Redirects to the index page with a logout message.
+    """
 	logout(request)
 	messages.info(request, "You have successfully logged out.")
 	return redirect("todo:index")
@@ -540,6 +790,16 @@ def logout_request(request):
 
 # Reset user password
 def password_reset_request(request):
+    """
+    Handles password reset requests. If the request method is POST, it validates the email and sends a password 
+    reset email if the user exists. It renders the password reset form otherwise.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: Renders the password reset form or redirects after sending the email.
+    """
     if request.method == "POST":
         password_reset_form = PasswordResetForm(request.POST)
         if password_reset_form.is_valid():
@@ -577,6 +837,19 @@ def password_reset_request(request):
 # Delete a template
 @require_POST
 def delete_template(request, template_id):
+    """
+    Deletes a specified template if the user is authenticated. If the user is not authenticated,
+    they are redirected to the login page. If the template exists, it is deleted and the user
+    is redirected to the templates list page.
+
+    Args:
+        request: The HTTP request object.
+        template_id (int): The ID of the template to be deleted.
+
+    Returns:
+        HttpResponse: Redirects to the login page if the user is not authenticated, 
+                      or redirects to the templates list page after deletion.
+    """
     if not request.user.is_authenticated:
         return redirect("/login")
     template = get_object_or_404(Template, id=template_id)
