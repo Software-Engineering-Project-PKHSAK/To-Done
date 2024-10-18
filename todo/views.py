@@ -754,22 +754,23 @@ def login_request(request):
     Returns:
         HttpResponse: Redirects to the index page or renders the login form with error messages.
     """
-	if request.method == "POST":
-		form = AuthenticationForm(request, data=request.POST)
-		if form.is_valid():
-			username = form.cleaned_data.get('username')
-			password = form.cleaned_data.get('password')
-			user = authenticate(username=username, password=password)
-			if user is not None:
-				login(request, user)
-				messages.info(request, f"You are now logged in as {username}.")
-				return redirect("todo:index")
-			else:
-				messages.error(request,"Invalid username or password.")
-		else:
-			messages.error(request,"Invalid username or password.")
-	form = AuthenticationForm()
-	return render(request=request, template_name="todo/login.html", context={"login_form":form, "config": config})
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}.")
+                return redirect("todo:index")
+            else:
+                messages.error(request, "Invalid username or password.")
+        else:
+            messages.error(request, "Invalid username or password.")
+    form = AuthenticationForm()
+    return render(request=request, template_name="todo/login.html", context={"login_form": form, "config": config})
+
 
 
 # Logout a user
@@ -783,9 +784,9 @@ def logout_request(request):
     Returns:
         HttpResponse: Redirects to the index page with a logout message.
     """
-	logout(request)
-	messages.info(request, "You have successfully logged out.")
-	return redirect("todo:index")
+    logout(request)
+    messages.info(request, "You have successfully logged out.")
+    return redirect("todo:index")
 
 
 # Reset user password
