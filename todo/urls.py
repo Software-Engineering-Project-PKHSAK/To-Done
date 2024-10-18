@@ -7,7 +7,6 @@ app_name = "todo"
 # Urls for to-done app
 urlpatterns = [
     path('', views.index, name='index'),
-    path('index.html', views.social_login, name="social_login"),
     path('todo', views.index, name='todo'),
     path('todo/<int:list_id>', views.index, name='todo_list_id'),
     path('config_hook/<path:template_str>/', views.config_hook, name='config_hook'),

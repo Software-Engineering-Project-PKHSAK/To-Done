@@ -737,9 +737,9 @@ def social_login(request):
         
         return redirect("todo:index")
     
-    except ValueError:
-        return HttpResponse(status=403)
-
+    except ValueError as e:
+        messages.error(request, e)
+        return redirect("todo:index")
 
 # Login a user
 def login_request(request):
