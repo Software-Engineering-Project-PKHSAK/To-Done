@@ -49,6 +49,22 @@ from django.core.mail import EmailMessage
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
+
+import csv
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
+from .models import List, ListItem
+
+
+# import csv
+# from django.shortcuts import render, redirect
+# from django.http import HttpResponseRedirect
+# from django.urls import reverse
+# from .models import List, ListItem
+# from django.contrib import messages
+# from datetime import datetime
+
 config = {
     "darkMode": False,
     "primary_color": '#0fa662',
@@ -856,6 +872,37 @@ def password_reset_request(request):
     
     password_reset_form = PasswordResetForm()
     return render(request=request, template_name="todo/password/password_reset.html", context={"password_reset_form":password_reset_form, "config": config})
+
+
+# Export todo 
+
+def export_todo_csv(request):
+    # Create the HttpResponse object with CSV headers.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="todo_lists.csv"'
+
+    # Create a CSV writer object
+    writer = csv.writer(response)
+    writer.writerow(['List Title', 'Item Name', 'Item Text', 'Is Done', 'Created On', 'Due Date'])
+
+    # Fetch data to export
+    for todo_list in List.objects.all():
+        for item in todo_list.listitem_set.all():
+            writer.writerow([
+                todo_list.title_text,
+                item.item_name,
+                item.item_text,
+                item.is_done,
+                item.created_on,
+                item.due_date,
+            ])
+
+    return response
+
+
+# Import todo from a csv file
+
+
 
 # Delete a template
 @require_POST
