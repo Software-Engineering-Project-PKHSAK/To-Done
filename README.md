@@ -131,6 +131,43 @@ We wanted to work on something that is:
     <img src="img/todone-tag-color.gif" width="500" height="250" />
 </p>
 
+# Future Scope
+
+## 3 month Tasks
+1) ### Task Creation and Management:
+   Enhance the task creation interface with fields for due dates and priority levels.
+   Implementing basic task editing and deletion functionalities.
+
+2) ### User Interface Improvements:
+   Conduct user testing to gather feedback on the current UI.
+   Make initial UI improvements based on user feedback.
+
+3) ### Basic Notifications:
+   Implement email notifications for task deadlines.
+
+## 6 month Tasks
+1) ### Collaboration Features
+   Develop shared tasks functionality to allow users to collaborate on projects.
+   Implement a commenting system for tasks.
+
+2) ### Task Prioritization and Categorization
+   Introduce tagging and categorization for tasks.
+   Implement priority levels for tasks.
+
+3) ### Enhanced User Interface
+    Implement responsive design for mobile compatibility.
+    Introduce a dark mode option.
+
+## 12 month Tasks
+1) ### Mobile Application Development
+    Develop and launch a mobile application for iOS and Android.
+
+2) ### Advanced Search and Filtering
+    Implement a robust search feature for tasks.
+    Develop filtering options based on date, priority, and category.
+
+3) ### Customizable Dashboards
+    Allow users to customize their dashboard layout and displayed information.
 
 ### Want to Contribute?
 
