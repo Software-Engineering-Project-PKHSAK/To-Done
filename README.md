@@ -131,6 +131,11 @@ We wanted to work on something that is:
     <img src="img/todone-tag-color.gif" width="500" height="250" />
 </p>
 
+# Project Funding
+
+Our project is currently not funded, and we operate on a volunteer and open-source basis, and currently, improvement of the project solely relies on the dedication of our team and contributions from the open-source community.
+
+
 # Future Scope
 
 ## 3 month Tasks
