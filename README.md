@@ -34,6 +34,12 @@ https://user-images.githubusercontent.com/23623764/205810552-556e0449-3f81-4e55-
 ### Watch this video to know more about the original TO-DONE 
 <img src="img/todone-create-list.gif" width="1200" height="500" />
 
+### Target Audience
+To-Done is ideal for:
+- **Students**: Manage assignments and deadlines.
+- **Professionals**: Track work tasks and project milestones.
+- **Teams**: Collaborate on shared tasks and responsibilities.
+
 Contents
 ========
 
