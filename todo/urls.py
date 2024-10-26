@@ -52,5 +52,5 @@ urlpatterns = [
     path("password_reset", views.password_reset_request, name="password_reset"),
     path('templates/delete/<int:template_id>', views.delete_template, name='delete_template'),
     path('export_todo_csv', views.export_todo_csv, name='export_todo_csv'),
-    
+    path('import_todo_csv', views.import_todo_csv, name='import_todo_csv'),
 ]

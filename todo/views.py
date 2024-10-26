@@ -20,7 +20,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
 # IN THE SOFTWARE.
 
-import datetime
+# import datetime
 import json
 
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
@@ -62,8 +62,9 @@ from .models import List, ListItem
 # from django.http import HttpResponseRedirect
 # from django.urls import reverse
 # from .models import List, ListItem
-# from django.contrib import messages
-# from datetime import datetime
+# from django.contrib import messages 
+import datetime
+from dateutil import parser
 
 config = {
     "darkMode": False,
@@ -896,11 +897,65 @@ def export_todo_csv(request):
                 item.created_on,
                 item.due_date,
             ])
+            # item_name=item_name, created_on=create_on_time, finished_on=finished_on_time, due_date=due_date, tag_color=tag_color, list_id=list_id, item_text="", is_done=False
 
     return response
 
 
 # Import todo from a csv file
+
+# import csv
+# from django.shortcuts import render, redirect
+# from django.http import HttpResponseRedirect
+# from django.urls import reverse
+# from .models import List, ListItem
+# from django.contrib import messages
+# from datetime import datetime
+
+def import_todo_csv(request):
+    if request.method == 'POST' and request.FILES.get('csv_file'):
+        csv_file = request.FILES['csv_file']
+        reader = csv.reader(csv_file.read().decode('utf-8').splitlines())
+        next(reader)  # Skip the header row
+
+        for row in reader:
+            # Assuming CSV format matches [List Title, Item Name, Item Text, Is Done, Created On, Due Date]
+            if len(row) < 6:  # Validate row length
+                messages.error(request, 'Invalid CSV format. Please check your file.')
+                return redirect(reverse('todo:import_todo_csv'))
+
+            list_title, item_name, item_text, is_done, created_on, due_date = row
+
+            # Get or create List by title
+            todo_list, created = List.objects.get_or_create(title_text=list_title)
+
+            # Convert string values to proper types
+            is_done = is_done.lower() in ['true', '1']
+            # created_on = datetime.strptime(created_on, '%Y-%m-%d').date() if created_on else None
+            # due_date = datetime.strptime(due_date, '%Y-%m-%d').date() if due_date else None
+            
+            created_on = parser.isoparse(created_on)
+            due_date = parser.isoparse(due_date) if due_date else None
+
+            # Create the ListItem
+            ListItem.objects.create(
+                list=todo_list,
+                item_name=item_name,
+                item_text=item_text,
+                is_done=is_done,
+                created_on=created_on,
+                finished_on=timezone.now(),
+                due_date=due_date,
+            )
+            # item_name = models.CharField(max_length=50, null=True, blank=True)
+
+        messages.success(request, 'Todos imported successfully!')
+        # return HttpResponseRedirect(reverse('todo:home'))
+    
+    return redirect("todo:index")
+
+    # return render(request, 'todo/import_csv.html')
+
 
 
 

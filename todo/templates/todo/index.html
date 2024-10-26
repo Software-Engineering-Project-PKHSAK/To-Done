@@ -499,10 +499,28 @@
         </select>
         <input type="hidden" id="newListTag" placeholder="New List tag">
         <input type="text" id="sharedUser" placeholder="Share this list with...">
-        <span onclick="newTodoList()" class="addTodoList">Add</span>
-        <a href="{% url 'todo:config_hook' 'export_todo_csv' %}" class="btn btn-primary" style="margin-bottom: 10px;">Export ToDo as CSV</a>
-        
-        
+        <!-- <span onclick="newTodoList()" class="addTodoList">Add</span> -->
+
+        <!-- <button type="button" style="margin-top: 20px;"><a href="{% url 'todo:config_hook' 'export_todo_csv' %}"></a> Export ToDo as CSV</button> -->
+        <span><h3><br/></h3></span>
+
+        <div style="display: inline-block">
+        <a href="{% url 'todo:config_hook' 'export_todo_csv' %}" style="font-size: 1.2rem; border: solid 2px #0fa662;border-radius: 5px; margin-bottom: 10px;">Export</a>
+        <form method="POST" enctype="multipart/form-data" action="{% url 'todo:import_todo_csv' %}">
+            {% csrf_token %}
+            <label for="csv_file">Import from CSV File:</label>
+            <input type="file" name="csv_file" id="csv_file" required>
+            <button type="submit">Import</button>
+        </form>
+
+        <!-- <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label>Select CSV File to Import:</label>
+            <input type="file" name="csv_file" required>
+        <!-- <a href="{% url 'todo:config_hook' 'import_todo_csv' %}" class="btn btn-primary" style="margin-bottom: 10px;">Export ToDo as CSV</a>
+        <span onclick="newTodoList()" class="addTodoList">Add</span> -->
+         
+        </div>
     </div>
 
     <div class="main">
@@ -955,5 +973,10 @@ function toggleNewTagInput() {
         document.getElementById("newListTag").type='hidden';
     }
 }
+
+function importFromCSV(){
+    httpRequest.open('POST', '/import_todo_csv');
+}
+
 </script>
 </html>
