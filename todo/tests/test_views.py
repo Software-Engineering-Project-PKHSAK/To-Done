@@ -23,11 +23,12 @@
 from django.urls import reverse
 from django.test import TestCase, Client, RequestFactory
 from django.contrib.auth.models import User
-from todo.views import login_request, template_from_todo, template, delete_todo, index, getListTagsByUserid, removeListItem, addNewListItem, updateListItem, createNewTodoList, register_request, getListItemByName, getListItemById, markListItem, todo_from_template
+from todo.views import delete_template, login_request, template_from_todo, template, delete_todo, index, getListTagsByUserid, removeListItem, addNewListItem, updateListItem, createNewTodoList, register_request, getListItemByName, getListItemById, markListItem, todo_from_template
 from django.utils import timezone
 from todo.models import List, ListItem, Template, TemplateItem, ListTags, SharedList
 from todo.forms import NewUserForm
 from django.contrib.messages.storage.fallback import FallbackStorage
+from django.contrib.auth.models import AnonymousUser
 
 import json
 
@@ -39,6 +40,7 @@ class TestViews(TestCase):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(
             username='jacob', email='jacob@…', password='top_secret')
+        self.anonymous_user = AnonymousUser()
 
     def testLogin(self):
         request = self.factory.get('/login/')
@@ -421,3 +423,37 @@ class TestViews(TestCase):
         setattr(request, '_messages', FallbackStorage(request))
         response = login_request(request)
         self.assertEqual(response.status_code, 200)
+
+    def test_delete_template(self):
+        request = self.factory.get('/todo/')
+        request.user = self.user
+        new_template = Template.objects.create(
+            title_text="test template",
+            created_on=timezone.now(),
+            updated_on=timezone.now(),
+            user_id_id=request.user.id
+        )
+        post = request.POST.copy()
+        post['todo'] = 1
+        request.POST = post
+        request.method = "POST"
+        response = delete_template(request, new_template.id)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/templates')
+
+    def test_delete_template_not_logged_in(self):
+        request = self.factory.get('/todo/')
+        request.user = self.anonymous_user
+        new_template = Template.objects.create(
+            title_text="test template",
+            created_on=timezone.now(),
+            updated_on=timezone.now(),
+            user_id_id=request.user.id
+        )
+        post = request.POST.copy()
+        post['todo'] = 1
+        request.POST = post
+        request.method = "POST"
+        response = delete_template(request, new_template.id)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/login')
