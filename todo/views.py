@@ -977,7 +977,10 @@ def delete_template(request, template_id):
     """
     if not request.user.is_authenticated:
         return redirect("/login")
-    template = get_object_or_404(Template, id=template_id)
-    if template:
+    try:
+      template = Template.objects.get(id=template_id)
+    except Template.DoesNotExist:
+        print("Template doesn't exist!")
+    else:
         template.delete()
     return redirect('/templates')

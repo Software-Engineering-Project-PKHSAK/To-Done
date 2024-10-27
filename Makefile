@@ -15,6 +15,7 @@ help:
 	@echo "  make setup        Install dependencies, apply migrations, and start the server"
 	@echo "  make install      Install Django and dependencies"
 	@echo "  make migrate      Apply migrations"
+	@echo "  make test         Test the codebase"
 	@echo "  make run          Start the Django development server"
 	@echo ""
 
@@ -37,3 +38,8 @@ run:
 # Install, migrate, and run server
 .PHONY: setup
 setup: install migrate run
+
+# Test the codebase
+.PHONY: test
+test:
+	$(PYTHON) manage.py test todo.tests.test_views

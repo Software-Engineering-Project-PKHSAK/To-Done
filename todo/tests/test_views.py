@@ -23,12 +23,14 @@
 from django.urls import reverse
 from django.test import TestCase, Client, RequestFactory
 from django.contrib.auth.models import User
-from todo.views import delete_template, login_request, template_from_todo, template, delete_todo, index, getListTagsByUserid, removeListItem, addNewListItem, updateListItem, createNewTodoList, register_request, getListItemByName, getListItemById, markListItem, todo_from_template
+from todo.views import config, config_hook, delete_template, login_request, template_from_todo, template, delete_todo, index, getListTagsByUserid, removeListItem, addNewListItem, updateListItem, createNewTodoList, register_request, getListItemByName, getListItemById, markListItem, todo_from_template
 from django.utils import timezone
 from todo.models import List, ListItem, Template, TemplateItem, ListTags, SharedList
 from todo.forms import NewUserForm
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.messages import get_messages
 
 import json
 
@@ -41,6 +43,10 @@ class TestViews(TestCase):
         self.user = User.objects.create_user(
             username='jacob', email='jacob@…', password='top_secret')
         self.anonymous_user = AnonymousUser()
+        # Config setup
+        config["darkMode"] = False
+        config["primary_color"] = '#0fa662'
+        config["hover_color"] = "#0b8f54"
 
     def testLogin(self):
         request = self.factory.get('/login/')
@@ -51,6 +57,55 @@ class TestViews(TestCase):
         request.POST = post
         response = login_request(request)
         self.assertEqual(response.status_code, 200)
+
+    def testLogin_with_invalid_credentials(self):
+        response = self.client.post(reverse('todo:login'), {
+            'username': 'wronguser',
+            'password': 'wrongpassword'
+        })
+
+        # Check that the response is rendered to the correct template
+        self.assertTemplateUsed(response, 'todo/login.html')
+
+        # # Check that the form contains errors
+        form = response.context['login_form']
+        self.assertIsInstance(form, AuthenticationForm)
+
+        # Check that the error message is set
+        messages_list = list(response.wsgi_request._messages)
+        self.assertEqual(len(messages_list), 1)
+        self.assertEqual(str(messages_list[0]), "Invalid username or password.")
+        
+        # Ensure the user is not logged in
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+    def testLogin_with_invalid_form(self):
+        response = self.client.post(reverse('todo:login'), {
+            'username': '',  # Invalid: empty username
+            'password': ''   # Invalid: empty password
+        })
+
+        # Check that the response is rendered to the correct template
+        self.assertTemplateUsed(response, 'todo/login.html')
+
+        # Check that the form is instantiated correctly
+        form = response.context['login_form']
+        self.assertIsInstance(form, AuthenticationForm)
+
+        # Check that the form contains errors
+        self.assertFalse(form.is_valid())  # The form should have errors
+
+        # Ensure error messages are displayed
+        messages_list = list(get_messages(response.wsgi_request))
+        self.assertGreater(len(messages_list), 0)  # Ensure there is at least one message
+        self.assertIn("Invalid", str(messages_list[0]))  # Check for required field error
+
+        # Ensure the user is not logged in
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+        # Test specific form errors (if you want to check individual fields)
+        self.assertIn('username', str(messages_list[0]))  # Ensure 'username' field has errors
+        self.assertIn('password', str(messages_list[0]))  # Ensure 'password' field has errors
 
     def testSavingTodoList(self):
         response = self.client.get(reverse('todo:createNewTodoList'))
@@ -457,3 +512,97 @@ class TestViews(TestCase):
         response = delete_template(request, new_template.id)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/login')
+
+    def test_delete_template_undefined(self):
+        request = self.factory.get('/todo/')
+        request.user = self.anonymous_user
+        request.method = "POST"
+        response = delete_template(request, 9999)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/login')
+
+    def test_delete_template_undefined_logged_in(self):
+        request = self.factory.get('/todo/')
+        request.user = self.user
+        request.method = "POST"
+        response = delete_template(request, 9999)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, '/templates')
+  
+    def test_initial_config_state(self):
+        # Initial config state check
+        self.assertFalse(config["darkMode"])
+        self.assertEqual(config["primary_color"], '#0fa662')
+        self.assertEqual(config["hover_color"], '#0b8f54')
+
+    def test_config_change_index(self): 
+        # Call config_hook and check if it toggles to dark mode on index page
+        request = self.factory.get('/todo/')
+        request.user = self.user
+        request.method = "POST"
+        response = config_hook(request, 'index')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('todo:index'))
+        self.assertTrue(config["darkMode"])
+        self.assertEqual(config["primary_color"], '#000000')
+        self.assertEqual(config["hover_color"], '#cccccc')
+
+        # Call config_hook again and check if it toggles back to light mode
+        response = config_hook(request, 'index')
+        
+        # Check config changes for dark mode disabled
+        self.assertFalse(config["darkMode"])
+        self.assertEqual(config["primary_color"], '#0fa662')
+        self.assertEqual(config["hover_color"], '#0b8f54')
+
+        # Verify redirect URL again
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('todo:index'))
+
+    def test_config_change_login(self): 
+        # Call config_hook and check if it toggles to dark mode on login page
+        request = self.factory.get('/todo/')
+        request.user = self.user
+        request.method = "POST"
+        response = config_hook(request, 'login')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('todo:login'))
+        self.assertTrue(config["darkMode"])
+        self.assertEqual(config["primary_color"], '#000000')
+        self.assertEqual(config["hover_color"], '#cccccc')
+
+        # Call config_hook again and check if it toggles back to light mode
+        response = config_hook(request, 'login')
+        
+        # Check config changes for dark mode disabled
+        self.assertFalse(config["darkMode"])
+        self.assertEqual(config["primary_color"], '#0fa662')
+        self.assertEqual(config["hover_color"], '#0b8f54')
+
+        # Verify redirect URL again
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('todo:login'))
+
+    def test_config_change_template(self): 
+        # Call config_hook and check if it toggles to dark mode on template page
+        request = self.factory.get('/todo/')
+        request.user = self.user
+        request.method = "POST"
+        response = config_hook(request, 'template')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('todo:template'))
+        self.assertTrue(config["darkMode"])
+        self.assertEqual(config["primary_color"], '#000000')
+        self.assertEqual(config["hover_color"], '#cccccc')
+
+        # Call config_hook again and check if it toggles back to light mode
+        response = config_hook(request, 'template')
+        
+        # Check config changes for dark mode disabled
+        self.assertFalse(config["darkMode"])
+        self.assertEqual(config["primary_color"], '#0fa662')
+        self.assertEqual(config["hover_color"], '#0b8f54')
+
+        # Verify redirect URL again
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('todo:template'))
