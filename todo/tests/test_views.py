@@ -137,6 +137,16 @@ class TestViews(TestCase):
         response = delete_todo(request)
         self.assertEqual(response.status_code, 302)
 
+    def test_delete_todo_list_not_logged_in(self):
+        request = self.factory.get('/todo/')
+        request.user = self.anonymous_user
+        post = request.POST.copy()
+        post['todo'] = 1
+        request.POST = post
+        response = delete_todo(request)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('todo:login'))
+
     def test_getListTagsByUserid(self):
         request = self.factory.get('/todo/')
         request.user = self.user
@@ -154,11 +164,29 @@ class TestViews(TestCase):
         print(response)
         self.assertIsNotNone(response)
 
+    def test_getListTagsByUserid_not_logged_in(self):
+        request = self.factory.get('/todo/')
+        request.user = self.anonymous_user
+        post = request.POST.copy()
+        post['todo'] = 1
+        request.POST = post
+        request.method = "POST"
+        response = getListTagsByUserid(request)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('todo:login'))
+    
     def test_index(self):
         request = self.factory.get('/todo/')
         request.user = self.user
         response = index(request)
         self.assertEqual(response.status_code, 200)
+    
+    def test_index_not_logged_in(self):
+        request = self.factory.get('/todo/')
+        request.user = self.anonymous_user
+        response = index(request)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('todo:login'))
 
     def test_template_from_todo_redirect(self):
         client = self.client
@@ -189,6 +217,16 @@ class TestViews(TestCase):
         request.POST = post
         response = template_from_todo(request)
         self.assertEqual(response.status_code, 302)
+    
+    def test_template_from_todo_function_not_logged_in(self):
+        request = self.factory.get('/todo/')
+        request.user = self.anonymous_user
+        post = request.POST.copy()  # to make it mutable
+        post['todo'] = 1
+        request.POST = post
+        response = template_from_todo(request)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('todo:login'))
 
     def test_template_display(self):
         request = self.factory.get('/todo/')
@@ -212,6 +250,16 @@ class TestViews(TestCase):
         request.POST = post
         response = template(request, 1)
         self.assertEqual(response.status_code, 200)
+    
+    def test_template_display_not_logged_in(self):
+        request = self.factory.get('/todo/')
+        request.user = self.anonymous_user
+        post = request.POST.copy()  # to make it mutable
+        post['todo'] = 1
+        request.POST = post
+        response = template(request, 1)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('todo:login'))
         
     def test_removeListItem(self):
         request = self.factory.get('/todo/')
