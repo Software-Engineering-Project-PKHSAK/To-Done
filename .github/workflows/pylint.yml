@@ -25,6 +25,9 @@ jobs:
         run: |
           pip install pylint
 
+      - name: List directory contents
+        run: ls -R  # List files for debugging
+
       - name: Run Pylint
         run: |
           pylint src/  
