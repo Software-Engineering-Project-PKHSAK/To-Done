@@ -31,4 +31,7 @@ jobs:
 
       - name: Run Pylint
         run: |
-          pylint .
+          pylint . > pylint_report.txt
+          score=$(grep 'Your code has been rated at' pylint_report.txt | awk '{print $7}' | cut -d '/' -f 1)
+          echo "Pylint score: $score"
+          # Here you can update the badge dynamically using the score
