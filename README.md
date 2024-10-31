@@ -72,22 +72,8 @@ We wanted to work on something that is:
 
 ### Quick Start
 
- * [Download](https://www.python.org/downloads/release/python-380/) and install Python 3.8.0 or higher
- * [Install](https://docs.djangoproject.com/en/4.1/topics/install/) Django 4.1
- * Clone the repository
-    ```bash
-    $ git clone git@github.com:Chloe-Ku/smart-todo.git
-    ```
- * Run migrations
-    ```bash
-    $ python manage.py migrate
-    ```
- * Start the app
-    ```bash
-    $ python manage.py runserver 8080
-    ```
- * Point your browser at http://127.0.0.1:8080 and explore the app
-
+ * Please refer to INSTALL.md for setting up & running this project
+ 
 ### Documentation
 [See this page](https://chloe-ku.github.io/smart-todo/)
 
