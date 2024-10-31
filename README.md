@@ -3,10 +3,10 @@
 </p>
 <h2 align="center">The Only Todo List You Need</h2>
 
-[![Build Status](https://github.com/Chloe-Ku/smart-todo/actions/workflows/django.yml/badge.svg)](https://github.com/Chloe-Ku/smart-todo/actions/workflows/django.yml)
+[![Build Status](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/actions/workflows/django.yml/badge.svg)](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/actions/workflows/django.yml)
 [![Coverage Status](https://coveralls.io/repos/github/Software-Engineering-Project-PKHSAK/To-Done/badge.svg?branch=main)](https://coveralls.io/github/Software-Engineering-Project-PKHSAK/To-Done?branch=main)
-[![license badge](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/Chloe-Ku/smart-todo/blob/main/LICENSE)
-[![issues badge](https://img.shields.io/github/issues/Chloe-Ku/smart-todo)](https://github.com/Chloe-Ku/smart-todo/issues)
+[![license badge](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/blob/main/LICENSE)
+[![issues badge](https://img.shields.io/github/issues/Software-Engineering-Project-PKHSAK/To-Done)](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/issues)
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/)
 [![Django 4.1](https://img.shields.io/badge/django-4.1-blue.svg)](https://docs.djangoproject.com/en/4.1/releases/4.1/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14015350.svg)](https://doi.org/10.5281/zenodo.14015350)
@@ -183,7 +183,7 @@ Our project is currently not funded, and we operate on a volunteer and open-sour
 ### Want to Contribute?
 
 Want to contribute to this project? Learn about [Contributing](CONTRIBUTING.md). Not sure where to start? Have a look at 
-the [good first issue](https://github.com/shahleon/smart-todo/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). Found a bug or have a new feature idea? Please create an [Issue](https://github.com/Chloe-Ku/smart-todo/issues) to notify us.
+the [good first issue](https://github.com/shahleon/smart-todo/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). Found a bug or have a new feature idea? Please create an [Issue](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/issues) to notify us.
 
 ### License
 
