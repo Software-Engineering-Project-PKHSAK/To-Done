@@ -23,6 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install pylint
 
       - name: List directory contents
@@ -30,4 +31,4 @@ jobs:
 
       - name: Run Pylint
         run: |
-          pylint src/  
+          pylint .
