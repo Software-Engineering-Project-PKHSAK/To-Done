@@ -11,7 +11,9 @@
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/)
 [![Django 4.1](https://img.shields.io/badge/django-4.1-blue.svg)](https://docs.djangoproject.com/en/4.1/releases/4.1/)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14015350.svg)](https://doi.org/10.5281/zenodo.14015350)
-[![Pylint](https://img.shields.io/badge/pylint-2.7.2-brightgreen.svg)](https://pylint.pycqa.org/en/latest/)
+[![Autopep](https://img.shields.io/github/actions/workflow/status/Software-Engineering-Project-PKHSAK/To-Done/.github/workflows/autopep8.yml?branch=main&label=autopep)](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/actions/workflows/autopep8.yml)
+[![Pyflakes](https://img.shields.io/github/actions/workflow/status/Software-Engineering-Project-PKHSAK/To-Done/.github/workflows/pyflakes.yml?branch=main&label=pyflakes)](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/actions/workflows/pyflakes.yml)
+[![Pylint](https://img.shields.io/badge/pylint-passing-success.svg)](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/actions/workflows/pylint.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Software-Engineering-Project-PKHSAK_To-Done&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Software-Engineering-Project-PKHSAK_To-Done)
 
 

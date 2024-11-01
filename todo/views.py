@@ -2,22 +2,22 @@
 
 # Copyright © 2024 Akarsh Reddy Eathamukkala
 
-# Permission is hereby granted, free of charge, to any person obtaining a copy of 
-# this software and associated documentation files (the “Software”), to deal in 
-# the Software without restriction, including without limitation the rights to 
+# Permission is hereby granted, free of charge, to any person obtaining a copy of
+# this software and associated documentation files (the “Software”), to deal in
+# the Software without restriction, including without limitation the rights to
 # use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-# of the Software, and to permit persons to whom the Software is furnished to 
+# of the Software, and to permit persons to whom the Software is furnished to
 # do so, subject to the following conditions:
 
-# The above copyright notice and this permission notice shall be included in 
+# The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
 
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS
 # OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
 # import datetime
@@ -72,6 +72,7 @@ config = {
     "hover_color": "#0b8f54"
 }
 
+
 def config_hook(request, template_str):
     config["darkMode"] = not config["darkMode"]
     if config["darkMode"]:
@@ -83,6 +84,8 @@ def config_hook(request, template_str):
     return redirect('todo:' + template_str)
 
 # Render the home page with users' to-do lists
+
+
 def index(request, list_id=0):
     """
     Renders the index page for the to-do application.
@@ -107,7 +110,7 @@ def index(request, list_id=0):
     """
     if not request.user.is_authenticated:
         return redirect("/login")
-    
+
     shared_list = []
 
     if list_id != 0:
@@ -115,13 +118,15 @@ def index(request, list_id=0):
         latest_lists = List.objects.filter(id=list_id)
 
     else:
-        latest_lists = List.objects.filter(user_id_id=request.user.id).order_by('-updated_on')
+        latest_lists = List.objects.filter(
+            user_id_id=request.user.id).order_by('-updated_on')
 
         try:
-            query_list_str = SharedList.objects.get(user_id=request.user.id).shared_list_id
+            query_list_str = SharedList.objects.get(
+                user_id=request.user.id).shared_list_id
         except SharedList.DoesNotExist:
             query_list_str = None
-        
+
         if query_list_str != None:
             shared_list_id = query_list_str.split(" ")
             shared_list_id.remove("")
@@ -129,7 +134,7 @@ def index(request, list_id=0):
             latest_lists = list(latest_lists)
 
             for list_id in shared_list_id:
-            
+
                 try:
                     query_list = List.objects.get(id=int(list_id))
                 except List.DoesNotExist:
@@ -137,16 +142,18 @@ def index(request, list_id=0):
 
                 if query_list:
                     shared_list.append(query_list)
-        
+
     latest_list_items = ListItem.objects.order_by('list_id')
-    saved_templates = Template.objects.filter(user_id_id=request.user.id).order_by('created_on')
-    list_tags = ListTags.objects.filter(user_id=request.user.id).order_by('created_on')
-    
+    saved_templates = Template.objects.filter(
+        user_id_id=request.user.id).order_by('created_on')
+    list_tags = ListTags.objects.filter(
+        user_id=request.user.id).order_by('created_on')
+
     # change color when is or over due
     cur_date = datetime.date.today()
-    for list_item in latest_list_items:       
+    for list_item in latest_list_items:
         list_item.color = "#FF0000" if cur_date > list_item.due_date else "#000000"
-            
+
     context = {
         'latest_lists': latest_lists,
         'latest_list_items': latest_list_items,
@@ -158,6 +165,8 @@ def index(request, list_id=0):
     return render(request, 'todo/index.html', context)
 
 # Create a new to-do list from templates and redirect to the to-do list homepage
+
+
 def todo_from_template(request):
     """
     Creates a new to-do list from a selected template.
@@ -235,7 +244,7 @@ def template_from_todo(request):
             created_on=timezone.now(),
             finished_on=timezone.now(),
             due_date=timezone.now(),
-            tag_color = todo_item.tag_color,
+            tag_color=todo_item.tag_color,
             template=new_template
         )
     return redirect("/templates")
@@ -289,7 +298,8 @@ def template(request, template_id=0):
     if template_id != 0:
         saved_templates = Template.objects.filter(id=template_id)
     else:
-        saved_templates = Template.objects.filter(user_id_id=request.user.id).order_by('created_on')
+        saved_templates = Template.objects.filter(
+            user_id_id=request.user.id).order_by('created_on')
     context = {
         'templates': saved_templates,
         'config': config
@@ -313,7 +323,7 @@ def removeListItem(request):
 
     Returns:
         HttpResponse: A redirect to the to-do page after successfully removing the specified list item.
-    
+
     Raises:
         IntegrityError: If there is a database integrity error while trying to delete the list item.
     """
@@ -336,6 +346,8 @@ def removeListItem(request):
         return redirect("/todo")
 
 # Update a to-do list item, called by javascript function
+
+
 @csrf_exempt
 def updateListItem(request, item_id):
     """
@@ -353,7 +365,7 @@ def updateListItem(request, item_id):
 
     Returns:
         HttpResponse: Redirects to the home page after updating the item or to the index if item ID is invalid.
-    
+
     Raises:
         IntegrityError: If there is a database integrity error while trying to update the list item.
     """
@@ -414,13 +426,15 @@ def addNewListItem(request):
         # create a new to-do list object and save it to the database
         try:
             with transaction.atomic():
-                todo_list_item = ListItem(item_name=item_name, created_on=create_on_time, finished_on=finished_on_time, due_date=due_date, tag_color=tag_color, list_id=list_id, item_text="", is_done=False)
+                todo_list_item = ListItem(item_name=item_name, created_on=create_on_time, finished_on=finished_on_time,
+                                          due_date=due_date, tag_color=tag_color, list_id=list_id, item_text="", is_done=False)
                 todo_list_item.save()
                 result_item_id = todo_list_item.id
         except IntegrityError:
             print("unknown error occurs when trying to create and save a new todo list")
             return JsonResponse({'item_id': -1})
-        return JsonResponse({'item_id': result_item_id})  # Sending an success response
+        # Sending an success response
+        return JsonResponse({'item_id': result_item_id})
     else:
         return JsonResponse({'item_id': -1})
 
@@ -442,7 +456,7 @@ def markListItem(request):
 
     Returns:
         JsonResponse: Contains the name of the item and the list if successful, or an empty response in case of failure.
-    
+
     Raises:
         IntegrityError: If there is a database integrity error while trying to update the list item.
     """
@@ -479,6 +493,8 @@ def markListItem(request):
         return HttpResponse("Request method is not a Post")
 
 # Get all the list tags by user id
+
+
 @csrf_exempt
 def getListTagsByUserid(request):
     """
@@ -501,7 +517,8 @@ def getListTagsByUserid(request):
         try:
             with transaction.atomic():
                 user_id = request.user.id
-                list_tag_list = ListTags.objects.filter(user_id=user_id).values()
+                list_tag_list = ListTags.objects.filter(
+                    user_id=user_id).values()
                 return JsonResponse({'list_tag_list': list(list_tag_list)})
         except IntegrityError:
             print("query list tag by user_id = " + str(user_id) + " failed!")
@@ -510,6 +527,8 @@ def getListTagsByUserid(request):
         return JsonResponse({'result': 'get'})  # Sending an success response
 
 # Get a to-do list item by name, called by javascript function
+
+
 @csrf_exempt
 def getListItemByName(request):
     """
@@ -543,7 +562,8 @@ def getListItemByName(request):
         try:
             with transaction.atomic():
                 query_list = List.objects.get(id=list_id)
-                query_item = ListItem.objects.get(list_id=list_id, item_name=list_item_name)
+                query_item = ListItem.objects.get(
+                    list_id=list_id, item_name=list_item_name)
                 # Sending an success response
                 return JsonResponse({'item_id': query_item.id, 'item_name': query_item.item_name, 'list_name': query_list.title_text, 'item_text': query_item.item_text})
         except IntegrityError:
@@ -638,10 +658,12 @@ def createNewTodoList(request):
             with transaction.atomic():
                 user_id = request.user.id
                 # print(user_id)
-                todo_list = List(user_id_id=user_id, title_text=list_name, created_on=create_on_time, updated_on=create_on_time, list_tag=tag_name)
+                todo_list = List(user_id_id=user_id, title_text=list_name,
+                                 created_on=create_on_time, updated_on=create_on_time, list_tag=tag_name)
                 if body['create_new_tag']:
                     # print('new tag')
-                    new_tag = ListTags(user_id_id=user_id, tag_name=tag_name, created_on=create_on_time)
+                    new_tag = ListTags(
+                        user_id_id=user_id, tag_name=tag_name, created_on=create_on_time)
                     new_tag.save()
 
                 todo_list.save()
@@ -650,24 +672,27 @@ def createNewTodoList(request):
                 # Progress
                 if body['shared_user']:
                     user_list = shared_user.split(' ')
-                    
 
                     k = len(user_list)-1
                     i = 0
                     while i <= k:
 
                         try:
-                            query_user = User.objects.get(username=user_list[i])
+                            query_user = User.objects.get(
+                                username=user_list[i])
                         except User.DoesNotExist:
                             query_user = None
 
                         if query_user:
 
-                            shared_list_id = SharedList.objects.get(user=query_user).shared_list_id
-                            shared_list_id = shared_list_id + str(todo_list.id) + " "
-                            SharedList.objects.filter(user=query_user).update(shared_list_id=shared_list_id)
+                            shared_list_id = SharedList.objects.get(
+                                user=query_user).shared_list_id
+                            shared_list_id = shared_list_id + \
+                                str(todo_list.id) + " "
+                            SharedList.objects.filter(user=query_user).update(
+                                shared_list_id=shared_list_id)
                             i += 1
-                            
+
                         else:
                             print("No user named " + user_list[i] + " found!")
                             user_not_found.append(user_list[i])
@@ -675,13 +700,15 @@ def createNewTodoList(request):
                             k -= 1
 
                     shared_user = ' '.join(user_list)
-                    new_shared_user = SharedUsers(list_id=todo_list, shared_user=shared_user)
+                    new_shared_user = SharedUsers(
+                        list_id=todo_list, shared_user=shared_user)
                     new_shared_user.save()
 
                     print(user_not_found)
 
                     if user_list:
-                        List.objects.filter(id=todo_list.id).update(is_shared=True)
+                        List.objects.filter(
+                            id=todo_list.id).update(is_shared=True)
 
         except IntegrityError as e:
             print(str(e))
@@ -717,17 +744,21 @@ def register_request(request):
             print(user)
 
             # Add a empty list to SharedList table
-            shared_list = SharedList(user=User.objects.get(username=user), shared_list_id="")
+            shared_list = SharedList(user=User.objects.get(
+                username=user), shared_list_id="")
             shared_list.save()
 
             login(request, user)
-            messages.success(request, "Registration successful." )
+            messages.success(request, "Registration successful.")
             return redirect("todo:index")
-        messages.error(request, "Unsuccessful registration. Invalid information.")
+        messages.error(
+            request, "Unsuccessful registration. Invalid information.")
     form = NewUserForm()
-    return render(request=request, template_name="todo/register.html", context={"register_form":form, 'config': config})
+    return render(request=request, template_name="todo/register.html", context={"register_form": form, 'config': config})
 
 # Social login
+
+
 @csrf_exempt
 def social_login(request):
     """
@@ -741,18 +772,19 @@ def social_login(request):
         HttpResponse: Redirects to the index page or returns a 403 status on token verification failure.
     """
     token = request.POST.get('credential')
-    
+
     try:
         # Verify the token with Google's API
         user_data = id_token.verify_oauth2_token(
-            token, requests.Request(), "736572233255-usvqanirqiarbk9ffhl6t6tl9br651fn.apps.googleusercontent.com"
+            token, requests.Request(
+            ), "736572233255-usvqanirqiarbk9ffhl6t6tl9br651fn.apps.googleusercontent.com"
         )
-        
+
         # Extract necessary user information
         email = user_data.get('email')
         first_name = user_data.get('given_name')
         last_name = user_data.get('family_name')
-        
+
         # Create or retrieve user
         user, created = User.objects.get_or_create(
             email=email,
@@ -762,25 +794,28 @@ def social_login(request):
                 'last_name': last_name,
             }
         )
-        
+
         # Authenticate and log in the user
         if created:
-            user.set_unusable_password()  # Optional: set an unusable password for Google-only login
+            # Optional: set an unusable password for Google-only login
+            user.set_unusable_password()
             user.save()
-        
+
         # Log the user in
         login(request, user)
-        
+
         # Optional: Store additional data in session or profile model
         # request.session['profile_picture'] = user_data.get('picture')
-        
+
         return redirect("todo:index")
-    
+
     except ValueError as e:
         messages.error(request, e)
         return redirect("todo:index")
 
 # Login a user
+
+
 def login_request(request):
     """
     Handles user login. If the request method is POST, it validates the login form and authenticates the user.
@@ -809,7 +844,6 @@ def login_request(request):
             messages.error(request, "Invalid username or password.")
     form = AuthenticationForm()
     return render(request=request, template_name="todo/login.html", context={"login_form": form, "config": config})
-
 
 
 # Logout a user
@@ -850,29 +884,30 @@ def password_reset_request(request):
                     subject = "Password Reset Requested"
                     email_template_name = "todo/password/password_reset_email.txt"
                     c = {
-					"email":user.email,
-					'domain':'127.0.0.1:8000',
-					'site_name': 'Website',
-					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
-					"user": user,
-					'token': default_token_generator.make_token(user),
-					'protocol': 'http',
+                        "email": user.email,
+                        'domain': '127.0.0.1:8000',
+                        'site_name': 'Website',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
                     }
                     email = render_to_string(email_template_name, c)
                     try:
-                        send_email = EmailMessage(subject, email, settings.EMAIL_HOST_USER, [user.email])
+                        send_email = EmailMessage(
+                            subject, email, settings.EMAIL_HOST_USER, [user.email])
                         send_email.fail_silently = False
                         send_email.send()
                     except BadHeaderError:
-                        return HttpResponse('Invalid header found')                  
+                        return HttpResponse('Invalid header found')
                     return redirect("/password_reset/done/")
             else:
                 messages.error(request, "Not an Email from existing users!")
         else:
             messages.error(request, "Not an Email from existing users!")
-    
+
     password_reset_form = PasswordResetForm()
-    return render(request=request, template_name="todo/password/password_reset.html", context={"password_reset_form":password_reset_form, "config": config})
+    return render(request=request, template_name="todo/password/password_reset.html", context={"password_reset_form": password_reset_form, "config": config})
 
 
 # Export todo 
@@ -962,6 +997,8 @@ def import_todo_csv(request):
 
 
 # Delete a template
+
+
 @require_POST
 def delete_template(request, template_id):
     """

@@ -2,33 +2,35 @@
 
 # Copyright © 2024 Akarsh Reddy Eathamukkala
 
-# Permission is hereby granted, free of charge, to any person obtaining a copy of 
-# this software and associated documentation files (the “Software”), to deal in 
-# the Software without restriction, including without limitation the rights to 
+# Permission is hereby granted, free of charge, to any person obtaining a copy of
+# this software and associated documentation files (the “Software”), to deal in
+# the Software without restriction, including without limitation the rights to
 # use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-# of the Software, and to permit persons to whom the Software is furnished to 
+# of the Software, and to permit persons to whom the Software is furnished to
 # do so, subject to the following conditions:
 
-# The above copyright notice and this permission notice shall be included in 
+# The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
 
-# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+# THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS
 # OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS 
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
 from django.db import models
 from django.contrib.auth.models import User
+
 
 class List(models.Model):
     title_text = models.CharField(max_length=100)
     created_on = models.DateTimeField()
     updated_on = models.DateTimeField()
     list_tag = models.CharField(max_length=50, default='none')
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user_id = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True, blank=True)
     is_shared = models.BooleanField(default=False)
 
     objects = models.Manager()
@@ -36,8 +38,10 @@ class List(models.Model):
     def __str__(self):
         return "%s" % self.title_text
 
+
 class ListTags(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user_id = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True, blank=True)
     tag_name = models.CharField(max_length=50, null=True, blank=True)
     created_on = models.DateTimeField()
 
@@ -69,7 +73,8 @@ class Template(models.Model):
     title_text = models.CharField(max_length=100)
     created_on = models.DateTimeField()
     updated_on = models.DateTimeField()
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user_id = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True, blank=True)
 
     objects = models.Manager()
 
@@ -84,11 +89,12 @@ class TemplateItem(models.Model):
     finished_on = models.DateTimeField()
     due_date = models.DateField()
     tag_color = models.CharField(max_length=10)
-    
+
     objects = models.Manager()
 
     def __str__(self):
         return "%s" % self.item_text
+
 
 class SharedUsers(models.Model):
     list_id = models.ForeignKey(List, on_delete=models.CASCADE)
@@ -99,8 +105,10 @@ class SharedUsers(models.Model):
     def __str__(self):
         return "%s" % str(self.list_id)
 
+
 class SharedList(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True, blank=True)
     shared_list_id = models.CharField(max_length=200)
 
     objects = models.Manager()
