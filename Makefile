@@ -42,4 +42,4 @@ setup: install migrate run
 # Test the codebase
 .PHONY: test
 test:
-	$(PYTHON) manage.py test todo.tests.test_views
+	$(PYTHON) manage.py test todo.tests.test_views todo.tests.test_export todo.tests.test_import
