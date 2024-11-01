@@ -33,6 +33,7 @@ jobs:
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
       - name: Create Documentation
         run: |
+          rm -rf docs/*
           python create_pdoc.py
           mv docs/todo/* docs/
 
