@@ -506,7 +506,7 @@
         <span><h3><br/></h3></span>
 
         <div style="display: inline-block">
-        <a href="{% url 'todo:config_hook' 'export_todo_csv' %}" style="font-size: 1.2rem; border: solid 2px #0fa662;border-radius: 5px; margin-bottom: 10px;">Export</a>
+        <a href="{% url 'todo:export_todo_csv' %}" style="font-size: 1.2rem; border: solid 2px #0fa662;border-radius: 5px; margin-bottom: 10px;">Export</a>
         <form method="POST" enctype="multipart/form-data" action="{% url 'todo:import_todo_csv' %}">
             {% csrf_token %}
             <label for="csv_file">Import from CSV File:</label>

@@ -928,7 +928,8 @@ def import_todo_csv(request):
             list_title, item_name, item_text, is_done, created_on, due_date = row
 
             # Get or create List by title
-            todo_list, created = List.objects.get_or_create(title_text=list_title)
+            # todo_list, created = List.objects.get_or_create(title_text=list_title)
+            todo_list, created = List.objects.get_or_create(title_text=list_title, defaults={'created_on': timezone.now(), 'updated_on': timezone.now()})
 
             # Convert string values to proper types
             is_done = is_done.lower() in ['true', '1']
@@ -937,7 +938,7 @@ def import_todo_csv(request):
             
             created_on = parser.isoparse(created_on)
             due_date = parser.isoparse(due_date) if due_date else None
-
+            
             # Create the ListItem
             ListItem.objects.create(
                 list=todo_list,
