@@ -11,7 +11,7 @@ on:
 
 # security: restrict permissions for CI jobs.
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   # Build the documentation and upload the static HTML files as an artifact.
@@ -29,7 +29,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          rm -rf docs/todo/*
+          rm -rf docs/
       # ADJUST THIS: build your documentation into docs/.
       # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
       - name: Create Documentation

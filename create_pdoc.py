@@ -11,10 +11,7 @@ import django
 
 django.setup()
 
-cmdline_args = ["--html", "-o", OUTPUT_DIR
-                , "todo.apps", "todo.forms"
-                , "todo.migrations", "todo.models"
-                , "todo.tests", "todo.views"]
+cmdline_args = ["--html", "-o", OUTPUT_DIR, "./todo"]
 
 if __name__ == "__main__":
     main(parser.parse_args(cmdline_args))
