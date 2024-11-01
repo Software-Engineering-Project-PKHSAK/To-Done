@@ -887,7 +887,8 @@ def export_todo_csv(request):
     writer.writerow(['List Title', 'Item Name', 'Item Text', 'Is Done', 'Created On', 'Due Date'])
 
     # Fetch data to export
-    for todo_list in List.objects.all():
+    todo_lists = List.objects.filter(user_id=request.user)
+    for todo_list in todo_lists:
         for item in todo_list.listitem_set.all():
             writer.writerow([
                 todo_list.title_text,
