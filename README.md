@@ -4,6 +4,7 @@
 <h2 align="center">The Only Todo List You Need</h2>
 
 [![Build Status](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/actions/workflows/django.yml/badge.svg)](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/actions/workflows/django.yml)
+[![Unittests](https://img.shields.io/github/actions/workflow/status/Software-Engineering-Project-PKHSAK/To-Done/unit_tests.yml?label=tests)](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/actions/workflows/unit_tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/Software-Engineering-Project-PKHSAK/To-Done/badge.svg?branch=main)](https://coveralls.io/github/Software-Engineering-Project-PKHSAK/To-Done?branch=main)
 [![license badge](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/blob/main/LICENSE)
 [![issues badge](https://img.shields.io/github/issues/Software-Engineering-Project-PKHSAK/To-Done)](https://github.com/Software-Engineering-Project-PKHSAK/To-Done/issues)
