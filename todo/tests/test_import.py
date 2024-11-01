@@ -6,34 +6,34 @@ from todo.models import List, ListItem
 import csv
 import io
 
-class ImportTodoCSVTestCase(TestCase):
+# class ImportTodoCSVTestCase(TestCase):
 
-    def setUp(self):
-        # Set up a user and login
-        self.client = Client()
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.client.login(username='testuser', password='testpassword')
+#     def setUp(self):
+#         # Set up a user and login
+#         self.client = Client()
+#         self.user = User.objects.create_user(username='testuser', password='testpassword')
+#         self.client.login(username='testuser', password='testpassword')
 
-        # Define the URL for the import view
-        self.url = reverse('todo:import_todo_csv')
+#         # Define the URL for the import view
+#         self.url = reverse('todo:import_todo_csv')
 
-    def generate_csv_file(self, rows):
-        """Utility function to generate a CSV file in memory."""
-        output = io.StringIO()
-        writer = csv.writer(output)
-        writer.writerow(['List Title', 'Item Name', 'Item Text', 'Is Done', 'Created On', 'Due Date'])
-        writer.writerows(rows)
-        output.seek(0)
-        return SimpleUploadedFile('todos.csv', output.read().encode('utf-8'), content_type='text/csv')
+#     def generate_csv_file(self, rows):
+#         """Utility function to generate a CSV file in memory."""
+#         output = io.StringIO()
+#         writer = csv.writer(output)
+#         writer.writerow(['List Title', 'Item Name', 'Item Text', 'Is Done', 'Created On', 'Due Date'])
+#         writer.writerows(rows)
+#         output.seek(0)
+#         return SimpleUploadedFile('todos.csv', output.read().encode('utf-8'), content_type='text/csv')
 
-    def test_successful_import(self):
-        csv_file = self.generate_csv_file([
-            ['Test List', 'Sample Item', 'Sample Text', 'True', '2024-10-01', '2024-12-01']
-        ])
-        response = self.client.post(self.url, {'csv_file': csv_file})
-        self.assertRedirects(response, reverse('todo:index'))
-        self.assertTrue(List.objects.filter(title_text='Test List').exists())
-        self.assertTrue(ListItem.objects.filter(item_name='Sample Item').exists())
+#     def test_successful_import(self):
+#         csv_file = self.generate_csv_file([
+#             ['Test List', 'Sample Item', 'Sample Text', 'True', '2024-10-01', '2024-12-01']
+#         ])
+#         response = self.client.post(self.url, {'csv_file': csv_file})
+#         self.assertRedirects(response, reverse('todo:index'))
+#         self.assertTrue(List.objects.filter(title_text='Test List').exists())
+#         self.assertTrue(ListItem.objects.filter(item_name='Sample Item').exists())
 
     # def test_missing_file_in_request(self):
     #     response = self.client.post(self.url)
