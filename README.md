@@ -28,6 +28,11 @@ To-Done isn’t just another task manager; it’s designed to enhance productivi
 
 ### Ready to conquer your to-do list? With To-Done, focus on what matters and streamline your workflow. Dive in today and experience how easy task management can be!
 
+### Repo video - TO-DONE 3.0 - Fall 2024 [Watch the video](img/todone-promo.mp4)
+
+https://drive.google.com/file/d/1lL37jl0X8ancEcHooGaRaZOkh_R0i1CX/view?usp=drive_link
+
+
 ### Watch this video to know more about TO-DONE 2.0
 
 
@@ -100,6 +105,7 @@ We wanted to work on something that is:
  
 ### Documentation
 * [Refer to this page](https://software-engineering-project-pkhsak.github.io/To-Done/views.html) for exhaustive documentation
+
 
 ### Features
 
