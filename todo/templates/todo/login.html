@@ -30,9 +30,14 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <title>To-Done</title>
 <style>
+  a {
+    color: {{ config.text_color }};
+  }
 	body {
         font-family: Calibri, Helvetica, sans-serif;
         margin: 0;
+        background-color: {{ config.background_color }};
+        color: {{ config.text_color }};
     }
 
     ul {
@@ -73,7 +78,7 @@
     }
 
     h1 {
-        color: {{ config.primary_color }};
+        color: {{ config.header_color }};
         text-align: center;
     }
 
@@ -82,7 +87,7 @@
         cursor: pointer;
         border-radius: 10px;
         background: {{ config.primary_color }};
-        border: 0;
+        border: 1px solid white;
         font-size: 16px;
         height: 37px;
         padding: 0 11px;
@@ -147,9 +152,9 @@
 			{{ login_form|crispy }}
 			<button class="btn btn-primary" type="submit">Login</button>
 		  </form>
-            <div style="padding-top: 12px"><a href="{% url 'todo:config_hook' 'login' %}">Theme: 
-            {% if config.darkMode %} Dark 
-            {% else %} Light {% endif %}</a></div>
+            <div style="padding-top: 12px"><a href="{% url 'todo:config_hook' 'login' %}">Lights
+            {% if config.darkMode %} on 
+            {% else %} off {% endif %}</a></div>
 		  <p class="text-center"><a href="/register">Create an account</a>.</p>
 		  <p class="text-center"><a href="/password_reset">Forget password</a>.</p>
 		{% endblock %}

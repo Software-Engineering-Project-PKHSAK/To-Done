@@ -69,7 +69,11 @@ from dateutil import parser
 config = {
     "darkMode": False,
     "primary_color": '#0fa662',
-    "hover_color": "#0b8f54"
+    "hover_color": "#0b8f54",
+    "background_color": "#ffffff",
+    "text_color": "#000000",
+    "side_nav": "#ddd",
+    "header_color": "#0fa662"
 }
 
 
@@ -78,9 +82,19 @@ def config_hook(request, template_str):
     if config["darkMode"]:
         config["primary_color"] = '#000000'
         config["hover_color"] = '#cccccc'
+        config["background_color"]= "#171515"
+        config["text_color"]= "#ffffff"
+        config["side_nav"] = "#373535"
+        config["header_color"]= "#ffffff"
+
     else:
         config["primary_color"] = '#0fa662'
         config["hover_color"] = '#0b8f54'
+        config["background_color"] = "#ffffff"
+        config["text_color"] = "#000000"
+        config["side_nav"] = "#ddd"
+        config["header_color"]= "#0fa662"
+
     return redirect('todo:' + template_str)
 
 # Render the home page with users' to-do lists

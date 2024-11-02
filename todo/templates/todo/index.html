@@ -29,6 +29,8 @@
         body {
             font-family: Calibri, Helvetica, sans-serif;
             margin: 0;
+            background-color: {{ config.background_color }};
+            color: {{ config.text_color }};
         }
 
         ul {
@@ -73,13 +75,17 @@
             text-align: center;
         }
 
+        .listItem > * {
+          color: #000000
+        }
+        
         .sidenav {
             height: 100%;
             width: 250px;
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #eee;
+            background-color: {{ config.side_nav }};
             overflow-x: hidden;
             padding-top: 15px;
             margin: 0;
@@ -94,7 +100,7 @@
             padding: 6px 8px 6px 16px;
             text-decoration: none;
             font-size: 20px;
-            color: #000000;
+            color: {{config.text_color}};
             display: block;
         }
 
@@ -192,7 +198,7 @@
             position: fixed;
             top: 0;
             right: 0;
-            background-color: #eee;
+            background-color: {{ config.side_nav }};
             overflow-x: hidden;
             padding-top: 10px;
             padding-right: 10px;
@@ -203,7 +209,7 @@
             padding: 6px 8px 6px 16px;
             text-decoration: none;
             font-size: 20px;
-            color: #000000;
+            color: {{ config.text_color }};
             display: block;
         }
 
@@ -211,7 +217,7 @@
             padding: 6px 8px 6px 16px;
             text-decoration: none;
             font-size: 20px;
-            color: #000000;
+            color: {{ config.text_color }};
             display: block;
         }
 
@@ -248,14 +254,14 @@
 
         .main h2 a {
             text-decoration: none;
-            color: {{ config.primary_color }};
+            color: {{ config.text_color }};
             display: block;
             padding-left: 5px;
         }
 
         #noListYet {
             text-decoration: none;
-            color: {{ config.primary_color }};
+            color: {{ config.text_color }};
             display: block;
             align-items: center;
         }
@@ -297,7 +303,7 @@
 
         .main ul li.done {
           background: #3d3939;
-          color: #fff;
+          color: {{ config.text_color }};
           text-decoration: line-through;
         }
 
@@ -318,7 +324,7 @@
         /* Style the header */
         .main .header {
           /* color: white; */
-          color: black;
+          color: {{ config.text_color }};
           display: block;
         }
 
