@@ -74,7 +74,7 @@ We wanted to work on something that is:
  * [Quickly Create Todo Lists From Existing Templates](#templates)
  * [Create Your Own Templates](#templates)
  
-### Key Features (Last Version)
+### Features (Last Version)
  * [Shared List](#shared-todo-lists)
  * [Add Due Date To Tasks](#due-date-color-tags)
  * [Due Date Alerting Mechanism](#due-date-color-tags)
@@ -82,22 +82,24 @@ We wanted to work on something that is:
  * [Customized Color Tag](#due-date-color-tags)
  * [Add Tags To Todo Lists For Customizable Grouping](#customizable-grouping-tags)
 
-### New Features
- * [Dark Mode]
- * Social login - Google Sign-in 
- * Bugfixes
+### New Key Features
+ * [Social login - Google Sign-in](#social-login-google-sign-in) 
+ * [Import/Export Todo Lists](#importexport-todo-lists)
+ * [Dark Mode](#dark-mode)
 
 ### Upcoming Features
- * Export and import to-do lists
  * Gamification - earn points by finishing your tasks, show-off your productivity in social media
+ * Collaborative Task Management
+ * Notification/Reminder Integration
+ * Pomodoro Timer Integration
  * [List of All Planned Features for Second Phase](https://github.com/users/shahleon/projects/2/views/6)
 
 ### Quick Start
 
- * Please refer to INSTALL.md for setting up & running this project
+ * Refer to INSTALL.md for setting up & running this project
  
 ### Documentation
-[See this page](https://chloe-ku.github.io/smart-todo/)
+* [Refer to this page](https://software-engineering-project-pkhsak.github.io/To-Done/views.html) for exhaustive documentation
 
 ### Features
 
@@ -124,7 +126,6 @@ We wanted to work on something that is:
     <img src="img/todone-templates.gif" width="500" height="250" />
 </p>
 
-### New Features
 #### Customizable Grouping Tags
 <p float="middle">
     <img src="img/todone-tag-list.gif" width="500" height="250" />
@@ -138,6 +139,33 @@ We wanted to work on something that is:
 #### Due Date, Color Tags
 <p float="middle">
     <img src="img/todone-tag-color.gif" width="500" height="250" />
+</p>
+
+### New Features
+
+#### Social Login: Google Sign-in
+<p float="middle">
+    <img src="img/todone-google-sign-in.gif" width="500" height="250">
+</p>
+
+#### Import/Export Todo Lists
+
+##### Import
+
+<p float="middle">
+    <img src="img/todo-import.gif" width="500" height="250">
+</p>
+
+##### Export
+
+<p float="middle">
+    <img src="img/todo-export.gif" width="500" height="250">
+</p>
+
+#### Dark Mode
+
+<p float="middle">
+    <img src="img/todo-dark-mode.gif" width="500" height="250">
 </p>
 
 # Project Funding
