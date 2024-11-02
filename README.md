@@ -165,7 +165,7 @@ We wanted to work on something that is:
 #### Dark Mode
 
 <p float="middle">
-    <img src="img/todo-dark-mode.gif" width="500" height="250">
+    <img src="img/todone-dark-mode.gif" width="500" height="250">
 </p>
 
 # Project Funding
